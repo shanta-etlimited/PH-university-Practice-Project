@@ -1,4 +1,4 @@
-import { Schema, model, connect, Model } from 'mongoose';
+import { Schema, model, connect, Model, Types } from 'mongoose';
 
 
 export type TGuardian={
@@ -24,6 +24,7 @@ export type TUserName = {
 }
 export type TStudent = {
     id: string;
+    userData: Types.ObjectId;
     password: string;
     name: TUserName;
     gender:  "male" | "female" | "other";
