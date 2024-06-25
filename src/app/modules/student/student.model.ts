@@ -1,8 +1,6 @@
 import { Schema , model} from "mongoose";
 import { TGuardian, TLocalGuardian, TStudent, StudentMethod, StudentModel, TUserName } from "./student.interface";
 import validator from 'validator';
-import bcrypt from 'bcrypt'
-import config from "../../config";
 
 export const userNameSchema = new Schema<TUserName>({
     firstName: { 
@@ -80,7 +78,12 @@ export const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>({
     id: { type: String , required: [true, "Student id is required"], unique: true},
-    password: { type: String, required: [true, "Student password is required"], maxLength: [20, "Password cannot be more than 20 characters"]},
+    user:{
+      type: Schema.Types.ObjectId,
+      required: [true, "User id is required"],
+      unique: true,
+      ref: "User"
+    },
     name: {
       type: userNameSchema,
       required: [true, "Student name is required"],
@@ -136,11 +139,6 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>({
     profileImg: { 
       type: String
     },
-    isActive: {
-      type: String,
-      enum: ["active", "blocked"],
-      default: "active"
-    },
     isDeleted: {
       type: Boolean,
       default: false
@@ -157,22 +155,6 @@ studentSchema.virtual("fullName").get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`
 })
 
-
-//pre save middleware/hook: will work on create() save()
-studentSchema.pre("save", async function (next) {
-  // console.log(this, "pre hook: we will save the data")
-
-  //hashing password and save into db
-  this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds))
-  next()
-})
-
-//post save middleware/hook
-studentSchema.post("save", async function (doc, next) {
-  doc.password = ""
-  // console.log(this, "post hook: we just saved the data")
-  next()
-})
 
 //query middleware
 studentSchema.pre("find", function (next) {
