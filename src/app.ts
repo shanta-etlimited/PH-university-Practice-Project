@@ -1,27 +1,26 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import { StudentRoutes } from './app/modules/student/student.route';
-import { UserRoutes } from './app/modules/user/user.route';
-import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
+import router from './app/routes';
+
 const app = express();
 
 //parsers
 app.use(express.json());
 app.use(cors());
 
-//application r outes
-app.use("/api/v1/users", UserRoutes)
-
 //application routes
-app.use("/api/v1/students", StudentRoutes)
+app.use("/api/v1", router)
 
-
-
+//root route
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello Ph University!');
 });
-app.use(notFoundHandler);
-app.use(errorHandler);
+
+//middleware of error handling and not found
+app.use(globalErrorHandler)
+app.use(notFound)
 
 // console.log(process.cwd());
 
