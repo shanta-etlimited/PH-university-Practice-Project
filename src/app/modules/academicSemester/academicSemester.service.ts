@@ -11,12 +11,12 @@ const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
   return result;
 };
 
-const getAllAcademicSemesterFromDB = async () => {
+const getAllAcademicSemesterIntoDB = async () => {
   const result = await AcademicSemester.find();
   return result;
 };
 
-const getSingleAcademicSemesterFromDB = async (_id: string) => {
+const getSingleAcademicSemesterIntoDB = async (_id: string) => {
   const result = await AcademicSemester.findOne({ _id });
   // const  result = await AcademicSemester.aggregate([
   //     {$match: {_id: id}}
@@ -24,7 +24,7 @@ const getSingleAcademicSemesterFromDB = async (_id: string) => {
   return result;
 };
 
-const updateSingleAcademicSemesterFromDB = async ( _id: string, payload: Partial<TAcademicSemester>) => {
+const updateSingleAcademicSemesterIntoDB = async ( _id: string, payload: Partial<TAcademicSemester>) => {
   if (
     payload.name &&
     academicSemesterNameCodeMapper[payload.name] !== payload.code
@@ -33,15 +33,14 @@ const updateSingleAcademicSemesterFromDB = async ( _id: string, payload: Partial
   }
 
   const result = await AcademicSemester.findByIdAndUpdate(_id, payload, {
-    new: true,
-    runValidators: true,
+    new: true
   });
   return result;
 };
 
 export const AcademicSemesterServices = {
   createAcademicSemesterIntoDB,
-  getAllAcademicSemesterFromDB,
-  getSingleAcademicSemesterFromDB,
-  updateSingleAcademicSemesterFromDB,
+  getAllAcademicSemesterIntoDB,
+  getSingleAcademicSemesterIntoDB,
+  updateSingleAcademicSemesterIntoDB,
 };
