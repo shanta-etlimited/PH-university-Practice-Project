@@ -209,4 +209,3 @@ studentSchema.methods.isUserExists = async function (id: string) {
 }
 
 export const Student = model<TStudent, StudentModel>("Student", studentSchema)
-

@@ -1,19 +1,17 @@
-import { Schema, model } from 'mongoose';
-import { TUser } from './user.interface';
 import bcrypt from 'bcrypt';
+import { Schema, model } from 'mongoose';
 import config from '../../config';
-
+import { TUser } from './user.interface';
 const userSchema = new Schema<TUser>(
   {
     id: {
       type: String,
-      required: [true, 'User id is required'],
+      required: true,
       unique: true,
     },
     password: {
       type: String,
-      required: [true, 'User password is required'],
-      maxLength: [20, 'Password cannot be more than 20 characters'],
+      required: true,
     },
     needsPasswordChange: {
       type: Boolean,
@@ -21,7 +19,7 @@ const userSchema = new Schema<TUser>(
     },
     role: {
       type: String,
-      enum: ['student', 'admin', 'faculty'],
+      enum: ['student', 'faculty', 'admin'],
     },
     status: {
       type: String,
@@ -39,20 +37,19 @@ const userSchema = new Schema<TUser>(
 );
 
 userSchema.pre('save', async function (next) {
-  // console.log(this, "pre hook: we will save the data")
-
-  //hashing password and save into db
-  this.password = await bcrypt.hash(
-    this.password,
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this; // doc
+  // hashing password and save into DB
+  user.password = await bcrypt.hash(
+    user.password,
     Number(config.bcrypt_salt_rounds),
   );
   next();
 });
 
-//set "" after saving password
-userSchema.post('save', async function (doc, next) {
+// set '' after saving password
+userSchema.post('save', function (doc, next) {
   doc.password = '';
-  // console.log(this, "post hook: we just saved the data")
   next();
 });
 
