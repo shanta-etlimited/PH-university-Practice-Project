@@ -1,7 +1,9 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import { ZodError, ZodIssue } from 'zod';
-import { TErrorSource } from '../interface/error';
 import config from '../config';
+import handleZodError from '../errors/handleZodError';
+import { TErrorSources } from '../interface/error';
+import handleValidationError from '../errors/handleValidationError';
 
 const globalErrorHandler : ErrorRequestHandler = (err , req, res, next) => {
 
@@ -9,34 +11,21 @@ const globalErrorHandler : ErrorRequestHandler = (err , req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong!';
  
-  let errorSources : TErrorSource = [{
+  let errorSources : TErrorSources = [{
     path: '',
     message: 'Something went wrong!'
   }]
 
-
-  const handleZodError =(err: ZodError)=>{
-
-    const errorSources : TErrorSource = err.issues.map((issue: ZodIssue) => {
-      return {
-        path: issue?.path[issue.path.length - 1],
-        message: issue?.message
-      }
-    })
-    const statusCode = 400
-
-    return {
-      statusCode,
-      message: 'Validation Error',
-      errorSources
-    }
-  }
-
   if(err instanceof ZodError){  
-    const simlifiedError = handleZodError(err);
-    statusCode = simlifiedError.statusCode
-    message = simlifiedError.message
-    errorSources = simlifiedError.errorSources
+    const simlifiedZodError = handleZodError(err);
+    statusCode = simlifiedZodError?.statusCode
+    message = simlifiedZodError?.message
+    errorSources = simlifiedZodError?.errorSources
+  }else if(err?.name === 'ValidationError'){
+    const simlifiedMongooseError = handleValidationError(err);
+    statusCode = simlifiedMongooseError?.statusCode
+    message = simlifiedMongooseError?.message
+    errorSources = simlifiedMongooseError?.errorSources
   }
 
   return res.status(statusCode).json({
