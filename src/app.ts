@@ -13,6 +13,10 @@ app.use(cors());
 //application routes
 app.use("/api/v1", router)
 
+const test = async(req: Request, res: Response)=>{
+  Promise.reject();
+}
+
 //root route
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello Ph University!');
