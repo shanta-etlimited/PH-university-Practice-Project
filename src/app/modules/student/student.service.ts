@@ -4,43 +4,44 @@ import { Student } from './student.model';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import httpStatus from 'http-status';
-
+import { studentSearchableFields } from './student.constant';
 
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  const { searchTerm, sort, limit, ...filterQuery } = query;
+  const queryObj = { ...query };
 
-  const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
-  const searchConditions: Record<string, any> = {};
+  const searchTerm = query?.searchTerm ? (query?.searchTerm as string) : '';
 
-  if (searchTerm) {
-    const searchRegex = new RegExp(searchTerm as string, 'i');
-    searchConditions.$or = studentSearchableFields.map((field) => ({ [field]: searchRegex }));
-  }
+  // delete fields so that it can't match or filter exactly
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+  excludeFields.forEach((el) => delete queryObj[el]);
 
-  // Exclude unnecessary fields
-  const excludedFields = ['searchTerm', 'sort', 'limit'];
-  excludedFields.forEach((field) => delete filterQuery[field]);
+  // apply pagination
+  const limit = query?.limit ? (query.limit as number) : 1;
+  const page = query?.page ? (query.page as number) : 1;
+  const skip = limit && page ? (page - 1) * limit : 0;
 
-  let studentsQuery = Student.find({ ...searchConditions, ...filterQuery })
+  const result = await Student.find({
+    $or: studentSearchableFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  })
+    .find(queryObj)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
       populate: {
         path: 'academicFaculty',
       },
-    });
+    })
+    .sort(query?.sort ? (query.sort as string) : '-createdAt') // sort
+    .limit(limit) // limit
+    .skip(skip) // skip
+    .select(
+      query?.fields ? (query.fields as string).split(',').join(' ') : '-__v',
+    ); // fields limiting
 
-  // Apply sorting
-  const sortFields = sort ? (sort as string).split(',').join(' ') : '-createdAt';
-  studentsQuery = studentsQuery.sort(sortFields);
-  
-  // Apply pagination
-  const limitNumber = limit ? parseInt(limit as string, 10) : 10;
-  studentsQuery = studentsQuery.limit(limitNumber);
-
-  const results = await studentsQuery.exec();
-  return results;
+    return result
 };
 
 
