@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
 import { FacultyModel, TFaculty, TUserName } from './faculty.interface';
-import validator from 'validator';
 import { BloodGroup, Gender } from './faculty.constant';
 
 export const userNameSchema = new Schema<TUserName>({
@@ -91,8 +90,8 @@ const facultySchema = new Schema<TFaculty>(
       ref: 'User',
     },
     isDeleted: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -104,35 +103,46 @@ const facultySchema = new Schema<TFaculty>(
 
 // generating full name
 facultySchema.virtual('fullName').get(function () {
-    return (
-      this?.name?.firstName +
-      '' +
-      this?.name?.middleName +
-      '' +
-      this?.name?.lastName
-    );
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
+});
+
+
+// filter out updated documents
+facultySchema.pre('find', function (next) {
+  this.find({ isUpdated: { $ne: true } });
+  next();
+});
+
+facultySchema.pre('findOne', function (next) {
+  this.find({ isUpdated: { $ne: true } });
+  next();
+});
+
+facultySchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isUpdated: { $ne: true } } });
+  next();
 });
 
 // filter out deleted documents
 facultySchema.pre('find', function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-  });
-  
-  facultySchema.pre('findOne', function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-  });
-  
-  facultySchema.pre('aggregate', function (next) {
-    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-    next();
-  });
-  
-  //checking if user is already exist!
-  facultySchema.statics.isUserExists = async function (id: string) {
-    const existingUser = await Faculty.findOne({ id });
-    return existingUser;
-  };
-  
-  export const Faculty = model<TFaculty, FacultyModel>('Faculty', facultySchema);
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+facultySchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+facultySchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
+//checking if user is already exist!
+facultySchema.methods.isUserExists = async function (id: string) {
+  const existingUser = await Faculty.findOne({ id });
+  return existingUser;
+};
+
+export const Faculty = model<TFaculty, FacultyModel>('Faculty', facultySchema);
