@@ -1,6 +1,7 @@
-import { Schema, model, connect, Model, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
-
+export type TGender = "male" | "female" | "other";
+export type TBloodGroup = "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
 export type TGuardian={
     fatherName: string;
     fatherOccupation: string;
@@ -27,17 +28,17 @@ export type TStudent = {
     user: Types.ObjectId;
     password: string;
     name: TUserName;
-    gender:  "male" | "female" | "other";
+    gender:  TGender;
     dateOfBirth?: String;
-    email: string;
+    email: string; 
     contactNumber: string;
     emergencyContactNumber: string;
-    bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+    bloodGroup?: TBloodGroup;
     presentAddress: string;
     permanentAddress: string;
     guardian: TGuardian;
     localGuardian: TLocalGuardian;
-    profileImg?: string;
+    profileImage?: string;
     admissionSemester: Types.ObjectId;
     academicDepartment: Types.ObjectId;
     isDeleted: boolean;
