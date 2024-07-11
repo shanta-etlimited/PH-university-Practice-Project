@@ -17,8 +17,8 @@ export const BloodGroup: TBloodGroup[] = [
 export const FacultySearchableFields = [
   'email',
   'id',
-  'contactNo',
-  'emergencyContactNo',
+  'contactNumber',
+  'emergencyContactNumber',
   'name.firstName',
   'name.lastName',
   'name.middleName',

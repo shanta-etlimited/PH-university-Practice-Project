@@ -1,4 +1,5 @@
 // year semesterCode 4digit number
+import { TAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
 import { User } from './user.model';
 
@@ -39,6 +40,41 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
   incrementId = `${payload.year}${payload.code}${incrementId}`;
+
+  return incrementId;
+};
+
+
+export const findLastFacultyId = async () => {
+  const lastFaculty = await User.findOne(
+    {
+      role: 'faculty',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined;
+};
+
+// F-0001
+export const generateFacultyId = async () => {
+  let currentId = (0).toString(); // 0000 by deafult
+  const lastFacultyId = await findLastFacultyId();
+  if (lastFacultyId) {
+    currentId = lastFacultyId.substring(2); // 000
+  }
+console.log(currentId);
+
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0'); // 0001
+
+  incrementId = `F-${incrementId}`;
 
   return incrementId;
 };
