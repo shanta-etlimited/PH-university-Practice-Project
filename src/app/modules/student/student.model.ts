@@ -7,7 +7,6 @@ import {
   StudentModel,
   TUserName,
 } from './student.interface';
-import validator from 'validator';
 import { BloodGroup, Gender } from './student.constant';
 
 export const userNameSchema = new Schema<TUserName>({
@@ -107,10 +106,6 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>(
       type: String,
       required: [true, 'Student email is required'],
       unique: true,
-      validate: {
-        validator: (value: string) => validator.isEmail(value),
-        message: '{VALUE} is not a valid email',
-      },
     },
     contactNumber: {
       type: String,
