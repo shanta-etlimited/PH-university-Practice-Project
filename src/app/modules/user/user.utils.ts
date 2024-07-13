@@ -59,22 +59,28 @@ export const findLastFacultyId = async () => {
       createdAt: -1,
     })
     .lean();
+  console.log("last Facultyl", lastFaculty?.id);// F-0001
+  console.log("last Facultyl", lastFaculty?.id.substring(2));// 0001
+  
 
   return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined;
 };
 
 // F-0001
 export const generateFacultyId = async () => {
-  let currentId = (0).toString(); // 0000 by deafult
+  let currentId = (0).toString(); // 0 by deafult
+  console.log("currentId",currentId);
+  
   const lastFacultyId = await findLastFacultyId();
   if (lastFacultyId) {
-    currentId = lastFacultyId.substring(2); // 000
+    currentId = lastFacultyId // 0001
   }
-console.log(currentId);
+console.log(currentId);// 0001
 
-  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0'); // 0001
-
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+  console.log("incrementId",incrementId);// 0002
   incrementId = `F-${incrementId}`;
+  console.log("incrementId",incrementId);// F-0002
 
   return incrementId;
 };

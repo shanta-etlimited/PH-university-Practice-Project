@@ -79,7 +79,7 @@ const createFacultyIntoDB = async(password: string, payload: TFaculty) => {
     const session = await mongoose.startSession();
 
     try{
-      session.startTransaction();
+      session.startTransaction();  
       //set manually generated id
       userData.id = await generateFacultyId();
       const newUser  = await User.create([userData], { session });
