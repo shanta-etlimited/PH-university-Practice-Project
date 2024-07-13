@@ -59,8 +59,8 @@ export const findLastFacultyId = async () => {
       createdAt: -1,
     })
     .lean();
-  console.log("last Facultyl", lastFaculty?.id);// F-0001
-  console.log("last Facultyl", lastFaculty?.id.substring(2));// 0001
+  console.log("last Faculty1", lastFaculty?.id);// F-0001
+  console.log("last Faculty2", lastFaculty?.id.substring(2));// 0001
   
 
   return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined;
@@ -75,12 +75,53 @@ export const generateFacultyId = async () => {
   if (lastFacultyId) {
     currentId = lastFacultyId // 0001
   }
-console.log(currentId);// 0001
+  console.log(currentId);// 0001
 
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
   console.log("incrementId",incrementId);// 0002
   incrementId = `F-${incrementId}`;
   console.log("incrementId",incrementId);// F-0002
+
+  return incrementId;
+};
+
+
+export const findLastAdminId = async () => {
+  const lastAdmin = await User.findOne(
+    {
+      role: 'admin',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+  console.log("last Admin1", lastAdmin?.id);// A-0001
+  console.log("last Admin2", lastAdmin?.id.substring(2));// 0001
+  
+
+  return lastAdmin?.id ? lastAdmin.id.substring(2) : undefined;
+};
+
+
+export const generateAdminId = async () => {
+  let currentId = (0).toString(); // 0 by deafult
+  console.log("currentId",currentId);
+  
+  const lastAdminId = await findLastAdminId();
+  if (lastAdminId) {
+    currentId = lastAdminId // 0001
+  }
+  console.log(currentId);// 0001
+
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+  console.log("incrementId",incrementId);// 0002
+  incrementId = `A-${incrementId}`;
+  console.log("incrementId",incrementId);// A-0002
 
   return incrementId;
 };
