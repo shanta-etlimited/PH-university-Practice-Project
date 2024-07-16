@@ -30,7 +30,7 @@ const getSingleStudent = catchAsyncError(async (req, res) => {
 const updateStudent = catchAsyncError(async (req, res) => {
     const { id } = req.params;
     const updateData = req.body.student;
-    const result = await StudentServices.updateStudentFromDB(
+    const result = await StudentServices.updateStudentIntoDB(
       id,
       updateData,
     );

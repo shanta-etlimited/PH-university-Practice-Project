@@ -13,12 +13,12 @@ const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
   return result;
 };
 
-const getAllAcademicSemesterIntoDB = async () => {
+const getAllAcademicSemesterFromDB = async () => {
   const result = await AcademicSemester.find();
   return result;
 };
 
-const getSingleAcademicSemesterIntoDB = async (_id: string) => {
+const getSingleAcademicSemesterFromDB = async (_id: string) => {
   const result = await AcademicSemester.findOne({ _id });
   // const  result = await AcademicSemester.aggregate([
   //     {$match: {_id: id}}
@@ -42,7 +42,7 @@ const updateSingleAcademicSemesterIntoDB = async ( _id: string, payload: Partial
 
 export const AcademicSemesterServices = {
   createAcademicSemesterIntoDB,
-  getAllAcademicSemesterIntoDB,
-  getSingleAcademicSemesterIntoDB,
+  getAllAcademicSemesterFromDB,
+  getSingleAcademicSemesterFromDB,
   updateSingleAcademicSemesterIntoDB,
 };

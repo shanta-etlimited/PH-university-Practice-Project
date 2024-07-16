@@ -84,7 +84,7 @@ const getSingleStudentFromDB = async (id: string) => {
   return result;
 };
 
-const updateStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
+const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   const { name, guardian, localGuardian, ...remainingStudentData } = payload;
 
   const modifiedUpdatedData: Record<string, unknown> = {
@@ -172,6 +172,6 @@ const deleteStudentFromDB = async (id: string) => {
 export const StudentServices = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
-  updateStudentFromDB,
+  updateStudentIntoDB,
   deleteStudentFromDB,
 };

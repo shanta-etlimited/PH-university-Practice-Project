@@ -7,7 +7,7 @@ import { Admin } from './admin.model';
 import { AdminSearchableFields } from './admin.constant';
 import { TAdmin } from './admin.interface';
 
-const getAllAdminsIntoDB = async (query: Record<string, unknown>) => {
+const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
   const adminQuery = new QueryBuilder(
     Admin.find(),
     query,
@@ -22,7 +22,7 @@ const getAllAdminsIntoDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const getSingleAdminIntoDB = async (id: string) => {
+const getSingleAdminFromDB = async (id: string) => {
   const result = await Admin.findOne({ id });
   return result;
 };
@@ -48,7 +48,7 @@ const updateAdminIntoDB = async (id: string, payload: Partial<TAdmin>) => {
 };
 
 
-const deleteAdminIntoDB = async (id: string) => {
+const deleteAdminFromDB = async (id: string) => {
   const adminExist = await Admin.findOne({ id });
   if (!adminExist) {
     throw new AppError(httpStatus.BAD_REQUEST, 'This admin does not exist');
@@ -87,8 +87,8 @@ const deleteAdminIntoDB = async (id: string) => {
 };
 
 export const AdminServices = {
-  getAllAdminsIntoDB,
-  getSingleAdminIntoDB,
+  getAllAdminsFromDB,
+  getSingleAdminFromDB,
   updateAdminIntoDB,
-  deleteAdminIntoDB,
+  deleteAdminFromDB,
 };

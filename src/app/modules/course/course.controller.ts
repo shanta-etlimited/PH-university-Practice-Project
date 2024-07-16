@@ -14,7 +14,7 @@ const createCourse = catchAsyncError(async (req, res, next) => {
 })
 
 const getAllCourses = catchAsyncError(async (req, res) => {
-    const result = await CourseServices.getAllCourseIntoDB(req.query);
+    const result = await CourseServices.getAllCourseFromDB(req.query);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -25,7 +25,7 @@ const getAllCourses = catchAsyncError(async (req, res) => {
 
 const getSingleCourse = catchAsyncError(async (req, res) => {
     const { id } = req.params;
-    const result = await CourseServices.getSingleCourseIntoDB(id);
+    const result = await CourseServices.getSingleCourseFromDB(id);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -34,20 +34,20 @@ const getSingleCourse = catchAsyncError(async (req, res) => {
     })
 })
 
-// const updateSingleCourse = catchAsyncError(async (req, res) => {
-//     const { id } = req.params;
-//     const result = await CourseServices.updateSingleCourseIntoDB(id, req.body);
-//     sendResponse(res, {
-//         statusCode: httpStatus.OK,
-//         success: true,
-//         message: 'Course is updated successfully',
-//         data: result
-//     })
-// })
+const updateSingleCourse = catchAsyncError(async (req, res) => {
+    const { id } = req.params;
+    const result = await CourseServices.updateSingleCourseIntoDB(id, req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Course is updated successfully',
+        data: result
+    })
+})
 
 const deleteSingleCourse = catchAsyncError(async (req, res) => {
     const { id } = req.params;
-    const result = await CourseServices.deleteSingleCourseIntoDB(id);
+    const result = await CourseServices.deleteSingleCourseFromDB(id);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -60,6 +60,6 @@ export const CourseControllers = {
     createCourse,
     getAllCourses,
     getSingleCourse,
-    // updateSingleCourse,
+    updateSingleCourse,
     deleteSingleCourse
 }

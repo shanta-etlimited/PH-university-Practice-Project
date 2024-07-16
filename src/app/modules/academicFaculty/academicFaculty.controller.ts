@@ -14,7 +14,7 @@ const createAcademicFaculty = catchAsyncError(async (req, res, next) => {
 })
 
 const getAllAcademicFaculties = catchAsyncError(async (req, res) => {
-    const result = await AcademicFacultyServices.getAllAcademicFacultiesIntoDB();
+    const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB();
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -25,7 +25,7 @@ const getAllAcademicFaculties = catchAsyncError(async (req, res) => {
 
 const getSingleAcademicFaculty = catchAsyncError(async (req, res) => {
     const { facultyId } = req.params;
-    const result = await AcademicFacultyServices.getSingleAcademicFacultyIntoDB(facultyId);
+    const result = await AcademicFacultyServices.getSingleAcademicFacultyFromDB(facultyId);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

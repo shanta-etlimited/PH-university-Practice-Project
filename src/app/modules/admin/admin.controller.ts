@@ -5,7 +5,7 @@ import catchAsyncError from '../../utils/catchAsyncError';
 import { AdminServices } from './admin.service';
 
 const getAllAdmins = catchAsyncError(async (req, res) => {
-  const result = await AdminServices.getAllAdminsIntoDB(req.query);
+  const result = await AdminServices.getAllAdminsFromDB(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -18,7 +18,7 @@ const getSingleAdmin = catchAsyncError(async (req, res) => {
   const { adminId } = req.params;
   console.log('adminId', adminId);
 
-  const result = await AdminServices.getSingleAdminIntoDB(adminId);
+  const result = await AdminServices.getSingleAdminFromDB(adminId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -44,7 +44,7 @@ const updateAdmin = catchAsyncError(async (req, res) => {
 
 const deleteAdmin = catchAsyncError(async (req, res) => {
   const { adminId } = req.params;
-  const result = await AdminServices.deleteAdminIntoDB(adminId);
+  const result = await AdminServices.deleteAdminFromDB(adminId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

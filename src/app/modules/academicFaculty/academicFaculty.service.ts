@@ -6,12 +6,12 @@ const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
     return result;
 }
 
-const getAllAcademicFacultiesIntoDB = async () => {
+const getAllAcademicFacultiesFromDB = async () => {
     const result = await AcademicFaculty.find();
     return result;
 }
 
-const getSingleAcademicFacultyIntoDB = async (id: string) => {
+const getSingleAcademicFacultyFromDB = async (id: string) => {
     const result = await AcademicFaculty.findById(id);
     return result;
 }
@@ -25,7 +25,7 @@ const updateSingleAcademicFacultyIntoDB = async (_id: string, payload: Partial<T
 
 export const AcademicFacultyServices = {
     createAcademicFacultyIntoDB,
-    getAllAcademicFacultiesIntoDB,
-    getSingleAcademicFacultyIntoDB,
+    getAllAcademicFacultiesFromDB,
+    getSingleAcademicFacultyFromDB,
     updateSingleAcademicFacultyIntoDB
 }

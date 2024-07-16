@@ -7,7 +7,7 @@ import { FacultyServices } from './faculty.service';
 
 const getAllFaculty = catchAsyncError(async (req, res) => {
   
-  const result = await FacultyServices.getAllFacultiesIntoDB(req.query);
+  const result = await FacultyServices.getAllFacultiesFromDB(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -20,7 +20,7 @@ const getSingleFaculty = catchAsyncError(async (req, res) => {
     const { facultyId } = req.params;
     console.log("facultyId",facultyId);
     
-    const result = await FacultyServices.getSingleFacultyIntoDB(facultyId);
+    const result = await FacultyServices.getSingleFacultyFromDB(facultyId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -46,7 +46,7 @@ const updateFaculty = catchAsyncError(async (req, res) => {
 
 const deleteFaculty = catchAsyncError(async (req, res) => {
     const { facultyId } = req.params;
-    const result = await FacultyServices.deleteFacultyIntoDB(facultyId);
+    const result = await FacultyServices.deleteFacultyFromDB(facultyId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

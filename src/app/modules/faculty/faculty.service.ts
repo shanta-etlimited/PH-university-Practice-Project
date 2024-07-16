@@ -7,7 +7,7 @@ import { FacultySearchableFields } from './faculty.constant';
 import { TFaculty } from './faculty.interface';
 import { Faculty } from './faculty.model';
 
-const getAllFacultiesIntoDB = async (query: Record<string, unknown>) => {
+const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
   const facultyQuery = new QueryBuilder(
     Faculty.find().populate('academicDepartment'),
     query,
@@ -22,7 +22,7 @@ const getAllFacultiesIntoDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const getSingleFacultyIntoDB = async (id: string) => {
+const getSingleFacultyFromDB = async (id: string) => {
   const result = await Faculty.findOne({ id }).populate('academicDepartment');
   return result;
 };
@@ -48,7 +48,7 @@ const updateFacultyIntoDB = async (id: string, payload: Partial<TFaculty>) => {
 };
 
 
-const deleteFacultyIntoDB = async (id: string) => {
+const deleteFacultyFromDB = async (id: string) => {
   const facultyExist = await Faculty.findOne({ id });
   if (!facultyExist) {
     throw new AppError(httpStatus.BAD_REQUEST, 'This faculty does not exist');
@@ -87,8 +87,8 @@ const deleteFacultyIntoDB = async (id: string) => {
 };
 
 export const FacultyServices = {
-  getAllFacultiesIntoDB,
-  getSingleFacultyIntoDB,
+  getAllFacultiesFromDB,
+  getSingleFacultyFromDB,
   updateFacultyIntoDB,
-  deleteFacultyIntoDB,
+  deleteFacultyFromDB,
 };
