@@ -12,6 +12,7 @@ router.post("/create-course",
 router.get("/", CourseControllers.getAllCourses);
 router.get("/:id", CourseControllers.getSingleCourse);
 router.patch("/:id", validateRequest(courseValidation.updateCourseValidationSchema), CourseControllers.updateSingleCourse);
+router.put("/:courseId/assign-faculties")
 
 router.delete("/:id", CourseControllers.deleteSingleCourse);
 
